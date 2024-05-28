@@ -6,20 +6,35 @@ using UnityEngine;
 
 public class TurretController : MonoBehaviour
 {
-    //[SerializeField] private float _rotationSpeed = 3f;
     [SerializeField] private float _maxAngle = 45f;
     [SerializeField] private GameObject _hotDogPrefab;
+    private StandController _standController;
+
+    private void Start() {
+        _standController = FindObjectOfType<StandController>();
+    }
 
     private void Update() {
-        if (Input.GetMouseButtonUp(0)) {
+        if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space)) {
             SpawnHotDog();
         }
     }
 
     private void SpawnHotDog () {
+        if (!_standController.IsHotDogComplete()) {
+            Debug.Log("Hot Dog is not complete.");
+            return;
+        }
+
         var moveDirection = GetMousePosDirClamped();
-        var newHotDog = Instantiate(_hotDogPrefab, this.transform.position, Quaternion.identity).GetComponent<HotDogProjectile>();
+        var hotDogData = _standController.CurrentHotDogData;
+        var newHotDog = Instantiate(_hotDogPrefab, this.transform.position, Quaternion.identity).GetComponent<HotDog>();
+        
+        newHotDog.HotDogData = hotDogData;
+        newHotDog.UpdateSprites();
         newHotDog.MoveDirection = moveDirection;
+
+        _standController.ResetCurrentHotDogData();
     }
 
     private Vector3 GetMousePosDirClamped() {
