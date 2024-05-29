@@ -22,16 +22,19 @@ public class TurretController : MonoBehaviour
 
     private void SpawnHotDog () {
         if (!_standController.IsHotDogComplete()) {
-            Debug.Log("Hot Dog is not complete.");
+            Debug.Log("Hot Dog is not completed.");
             return;
         }
 
         var moveDirection = GetMousePosDirClamped();
-        var hotDogData = _standController.CurrentHotDogData;
         var newHotDog = Instantiate(_hotDogPrefab, this.transform.position, Quaternion.identity).GetComponent<HotDog>();
         
-        newHotDog.HotDogData = hotDogData;
+        newHotDog.HotDogData.Bun = _standController.CurrentHotDogData.Bun;
+        newHotDog.HotDogData.Dog = _standController.CurrentHotDogData.Dog;
+        newHotDog.HotDogData.Sauce = _standController.CurrentHotDogData.Sauce;
+
         newHotDog.UpdateSprites();
+
         newHotDog.MoveDirection = moveDirection;
 
         _standController.ResetCurrentHotDogData();

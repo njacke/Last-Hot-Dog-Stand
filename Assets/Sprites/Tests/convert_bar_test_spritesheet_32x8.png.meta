@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 83d8dc0422e9f754397d58625928b930
+guid: f53f18ee34a15a341a6fb90ef965c282
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -123,180 +123,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: hot_dogs_test_spritesheet_8x8_0
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 24
-        width: 8
-        height: 8
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 34e0eebfbc13b304799f7054e35bfed7
-      internalID: -76866799
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: hot_dogs_test_spritesheet_8x8_1
-      rect:
-        serializedVersion: 2
-        x: 8
-        y: 24
-        width: 8
-        height: 8
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 76105dc046955c64680006b362d62d41
-      internalID: -821057289
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: hot_dogs_test_spritesheet_8x8_2
-      rect:
-        serializedVersion: 2
-        x: 16
-        y: 24
-        width: 8
-        height: 8
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 6da2d8800fff98a4a82c36086c738553
-      internalID: -1648452630
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: hot_dogs_test_spritesheet_8x8_3
-      rect:
-        serializedVersion: 2
-        x: 24
-        y: 24
-        width: 8
-        height: 8
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d74c6868a9cc8864fbb5d581c38bc65c
-      internalID: -189871292
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: hot_dogs_test_spritesheet_8x8_4
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 16
-        width: 8
-        height: 8
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b65dad30b50288947abb1001a38bd7fc
-      internalID: 413890845
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: hot_dogs_test_spritesheet_8x8_5
-      rect:
-        serializedVersion: 2
-        x: 8
-        y: 16
-        width: 8
-        height: 8
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 140f5a3012816c64db86194e94e6fd9f
-      internalID: 323108740
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: hot_dogs_test_spritesheet_8x8_6
-      rect:
-        serializedVersion: 2
-        x: 16
-        y: 16
-        width: 8
-        height: 8
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ee2c87d3e5851fd48ad3b6757b2ac159
-      internalID: 40254903
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: hot_dogs_test_spritesheet_8x8_7
-      rect:
-        serializedVersion: 2
-        x: 24
-        y: 16
-        width: 8
-        height: 8
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 3b9f2c5e4115c4e4a8c45e87d5fae8ff
-      internalID: 161621268
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: hot_dogs_test_spritesheet_8x8_8
+      name: convert_bar_test_spritesheet_32x8_0
       rect:
         serializedVersion: 2
         x: 0
         y: 8
-        width: 8
+        width: 32
         height: 8
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -305,8 +137,92 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 28e8dcaadb352e44d9b14239893c52d3
-      internalID: 673949750
+      spriteID: 8a77c039d539e194da0b8063080a9a04
+      internalID: -70749108
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: convert_bar_test_spritesheet_32x8_1
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 8
+        width: 32
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ed5cce63aa049524f84bc4f3ba67e5a0
+      internalID: 1399158524
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: convert_bar_test_spritesheet_32x8_2
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 8
+        width: 32
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d245c1695251c554394c368cd16a01b9
+      internalID: 384467774
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: convert_bar_test_spritesheet_32x8_3
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 8
+        width: 32
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3231cb225eca50942a1026140edcbd4e
+      internalID: -1109742248
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: convert_bar_test_spritesheet_32x8_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 32
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9ee9aa3985bccaa4da468a95b73b4465
+      internalID: 2027019215
       vertices: []
       indices: 
       edges: []
@@ -322,15 +238,11 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      hot_dogs_test_spritesheet_8x8_0: -76866799
-      hot_dogs_test_spritesheet_8x8_1: -821057289
-      hot_dogs_test_spritesheet_8x8_2: -1648452630
-      hot_dogs_test_spritesheet_8x8_3: -189871292
-      hot_dogs_test_spritesheet_8x8_4: 413890845
-      hot_dogs_test_spritesheet_8x8_5: 323108740
-      hot_dogs_test_spritesheet_8x8_6: 40254903
-      hot_dogs_test_spritesheet_8x8_7: 161621268
-      hot_dogs_test_spritesheet_8x8_8: 673949750
+      convert_bar_test_spritesheet_32x8_0: -70749108
+      convert_bar_test_spritesheet_32x8_1: 1399158524
+      convert_bar_test_spritesheet_32x8_2: 384467774
+      convert_bar_test_spritesheet_32x8_3: -1109742248
+      convert_bar_test_spritesheet_32x8_4: 2027019215
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

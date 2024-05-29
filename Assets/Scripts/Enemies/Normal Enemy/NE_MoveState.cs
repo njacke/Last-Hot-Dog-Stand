@@ -5,13 +5,11 @@ using UnityEngine;
 
 public class NE_MoveState : MoveState
 {
-    private NormalEnemy _normalEnemy;
-    private float _minConversionRange;
+    protected NormalEnemy _normalEnemy;
 
-    public NE_MoveState(Entity entity, FiniteStateMachine stateMachine, int animBoolNameHash, MoveStateData moveStateData, Vector3 targetPos, NormalEnemy normalEnemy, float minConversionRange) : base(entity, stateMachine, animBoolNameHash, moveStateData, targetPos)
+    public NE_MoveState(Entity entity, FiniteStateMachine stateMachine, int animBoolNameHash, MoveStateData moveStateData, NormalEnemy normalEnemy) : base(entity, stateMachine, animBoolNameHash, moveStateData)
     {
         _normalEnemy = normalEnemy;
-        _minConversionRange = minConversionRange;
     }
 
     public override void Enter()
@@ -27,22 +25,21 @@ public class NE_MoveState : MoveState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-        if (ConvertRangeCheck()) {
+
+        // transition to taste state
+        if (_normalEnemy.HasHotDog && !_normalEnemy.IsSatisfied) {
+            _normalEnemy.StateMachine.ChangeState(_normalEnemy.TasteState);
+        }
+
+        //transition to convert state       
+        else if (_normalEnemy.IsInConvertRange()) {
             _normalEnemy.StateMachine.ChangeState(_normalEnemy.ConvertState);
         }
+
     }
 
     public override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
-    }
-
-    private bool ConvertRangeCheck() {
-        float distToTarget = Vector3.Distance(_normalEnemy.transform.position, _targetPos);
-        if (distToTarget <= _minConversionRange) {
-            return true;
-        }
-
-        return false;
     }
 }

@@ -83,12 +83,22 @@ public class StandController : MonoBehaviour
     }
 
     private void ChangeBun(HotDogDataModel.Buns bunType) {
+        if (CurrentHotDogData.Bun != HotDogDataModel.Buns.None) {
+            Debug.Log("Bun was already selected");
+            return;
+        }
+
         ChangeIngredient(bunType, _bunCooldownsDict, ingredient => CurrentHotDogData.Bun = ingredient);
     }
 
     private void ChangeDog(HotDogDataModel.Dogs dogType) {
         if (CurrentHotDogData.Bun == HotDogDataModel.Buns.None) {
             Debug.Log("Pick a bun first!");
+            return;
+        }
+
+        if (CurrentHotDogData.Dog != HotDogDataModel.Dogs.None) {
+            Debug.Log("Sausage was already selected.");
             return;
         }
 
@@ -100,6 +110,12 @@ public class StandController : MonoBehaviour
             Debug.Log("Pick a sausage first!");
             return;
         }
+
+        if (CurrentHotDogData.Sauce != HotDogDataModel.Sauces.None) {
+            Debug.Log("Sauce was already selected.");
+            return;
+        }
+
         ChangeIngredient(sauceType, _sauceCooldownsDict, ingredient => CurrentHotDogData.Sauce = ingredient);
     }
 
@@ -133,6 +149,7 @@ public class StandController : MonoBehaviour
         CurrentHotDogData.Bun = HotDogDataModel.Buns.None;
         CurrentHotDogData.Dog = HotDogDataModel.Dogs.None;
         CurrentHotDogData.Sauce = HotDogDataModel.Sauces.None;
+        CurrentHotDogData.State = HotDogDataModel.EatenState.Full;
 
         OnIngredientChange?.Invoke();
     }

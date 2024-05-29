@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class NE_FleeState : FleeState
 {
-    private NormalEnemy _normalEnemy;
+    protected NormalEnemy _normalEnemy;
 
     public NE_FleeState(Entity entity, FiniteStateMachine stateMachine, int animBoolNameHash, FleeStateData fleeStateData, NormalEnemy normalEnemy) : base(entity, stateMachine, animBoolNameHash, fleeStateData)
     {
@@ -14,8 +14,8 @@ public class NE_FleeState : FleeState
     public override void Enter()
     {
         base.Enter();
-        _normalEnemy.BoxCollider2D.enabled = false;
         _direction = GetFleeDirection();
+        _normalEnemy.FinishHotDog();
     }
 
     public override void Exit()
@@ -36,8 +36,7 @@ public class NE_FleeState : FleeState
     private Vector3 GetFleeDirection() {
         if (_normalEnemy.transform.position.x > 0) {
             return Vector3.right;
-        }
-
+        }        
         return Vector3.left;
     }
 }

@@ -7,6 +7,7 @@ public class FleeState : State
 {
     protected FleeStateData _fleeStateData;
     protected Vector3 _direction = Vector3.zero;
+    
     public FleeState(Entity entity, FiniteStateMachine stateMachine, int animBoolNameHash, FleeStateData fleeStateData) : base(entity, stateMachine, animBoolNameHash)
     {
         _fleeStateData = fleeStateData;

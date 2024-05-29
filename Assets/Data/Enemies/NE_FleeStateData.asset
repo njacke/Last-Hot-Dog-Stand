@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd055353a63690041b989c64230b69cd, type: 3}
   m_Name: NE_FleeStateData
   m_EditorClassIdentifier: 
-  MoveSpeed: 1
+  MoveSpeed: 2

@@ -5,12 +5,10 @@ using UnityEngine;
 public class MoveState : State
 {
     protected MoveStateData _moveStateData;
-    protected Vector3 _targetPos;
 
-    public MoveState(Entity entity, FiniteStateMachine stateMachine, int animBoolNameHash, MoveStateData moveStateData, Vector3 targetPos) : base(entity, stateMachine, animBoolNameHash)
+    public MoveState(Entity entity, FiniteStateMachine stateMachine, int animBoolNameHash, MoveStateData moveStateData) : base(entity, stateMachine, animBoolNameHash)
     {        
         _moveStateData = moveStateData;
-        _targetPos = targetPos;
     }
 
     public override void Enter()
@@ -35,13 +33,13 @@ public class MoveState : State
     }
 
     public virtual void MoveTowardsTargetPos() {
-        float distToTarget = Vector3.Distance(_entity.transform.position, _targetPos);
+        float distToTarget = Vector3.Distance(_entity.transform.position, _entity.MoveTargetPos);
         if (distToTarget <= _moveStateData.MinTargetDistance) {
-            Debug.Log("Targer reached");
+            Debug.Log("Target reached");
             return;
         }
 
-        Vector3 dir = (_targetPos - _entity.transform.position).normalized;
+        Vector3 dir = (_entity.MoveTargetPos - _entity.transform.position).normalized;
         _entity.Rb.MovePosition(_entity.transform.position + _moveStateData.MoveSpeed * Time.fixedDeltaTime * dir);        
     }
 }

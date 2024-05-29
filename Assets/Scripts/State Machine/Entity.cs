@@ -5,6 +5,7 @@ public class Entity : MonoBehaviour
     public FiniteStateMachine StateMachine;
     public Rigidbody2D Rb { get; private set; }
     public Animator Anim { get; private set; }
+    public Vector3 MoveTargetPos { get; protected set; } = Vector3.zero;
 
     public virtual void Awake() {
         Rb = GetComponent<Rigidbody2D>();

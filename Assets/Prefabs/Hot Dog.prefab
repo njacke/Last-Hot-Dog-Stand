@@ -264,6 +264,7 @@ GameObject:
   - component: {fileID: 4580522500246170424}
   - component: {fileID: 3543348222993020785}
   - component: {fileID: 5242843439864597762}
+  - component: {fileID: 7877335646545648214}
   - component: {fileID: -3301737273021906320}
   m_Layer: 0
   m_Name: Hot Dog
@@ -364,6 +365,27 @@ SortingGroup:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_SortAtRoot: 0
+--- !u!95 &7877335646545648214
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9144894593484920978}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 57d99e57a6cbb424db756d57d35de970, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &-3301737273021906320
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -377,21 +399,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _projectileSpeed: 5
-  _bunSprites:
-  - {fileID: -1366123126, guid: c1c2edffc1381a1439561edc69c97c1b, type: 3}
-  - {fileID: 185325422, guid: c1c2edffc1381a1439561edc69c97c1b, type: 3}
-  - {fileID: 1348230773, guid: c1c2edffc1381a1439561edc69c97c1b, type: 3}
-  - {fileID: 0}
-  _dogSprites:
-  - {fileID: 819753466, guid: c1c2edffc1381a1439561edc69c97c1b, type: 3}
-  - {fileID: 1550370657, guid: c1c2edffc1381a1439561edc69c97c1b, type: 3}
-  - {fileID: -1828379744, guid: c1c2edffc1381a1439561edc69c97c1b, type: 3}
-  - {fileID: 0}
-  _sauceSprites:
-  - {fileID: -2105731320, guid: c1c2edffc1381a1439561edc69c97c1b, type: 3}
-  - {fileID: -1749558339, guid: c1c2edffc1381a1439561edc69c97c1b, type: 3}
-  - {fileID: -431259828, guid: c1c2edffc1381a1439561edc69c97c1b, type: 3}
-  - {fileID: 0}
+  _moveToParentDuration: 0.25
+  _hotDogSpritesData: {fileID: 11400000, guid: ab81b2620bea4d447bd93ece8a1c8868, type: 2}
   _bunSpriteRenderer: {fileID: 5562181159617340661}
   _dogSpriteRenderer: {fileID: 3807629793374360671}
   _sauceSpriteRenderer: {fileID: 5532480725349658506}
