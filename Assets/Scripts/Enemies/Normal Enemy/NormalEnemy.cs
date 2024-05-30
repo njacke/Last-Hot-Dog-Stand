@@ -20,7 +20,6 @@ public class NormalEnemy : Entity
     private FeedbackBubble _feedbackBubble;
     private ConvertBar _convertBar;
     private HotDog _currentHotDog;
-    private GameManager _gameManager;
 
     private readonly int ANIM_BOOL_MOVE_HASH = Animator.StringToHash("Move");
     private readonly int ANIM_BOOL_CONVERT_HASH = Animator.StringToHash("Convert");
@@ -28,9 +27,9 @@ public class NormalEnemy : Entity
     private readonly int ANIM_BOOL_TASTE_HASH = Animator.StringToHash("Taste");
     private readonly int ANIM_TRIGGER_BITE_HASH = Animator.StringToHash("Bite");
 
+    public int LaneAssigned { get; private set; }
     public bool HasHotDog { get; private set; } = false;
     public bool IsSatisfied { get; private set; } = false;
-    public bool IsInConversionRange { get; private set; } = false;
     public bool IsConverting { get; private set; } = false;
 
     public BoxCollider2D MyBoxCollider { get; private set; }
@@ -59,7 +58,6 @@ public class NormalEnemy : Entity
         base.Start();
 
         _convertBar.gameObject.SetActive(false);
-        MoveTargetPos = GetMoveTargetPos();
 
         MoveState = new NE_MoveState(this, StateMachine, ANIM_BOOL_MOVE_HASH, _moveStateData, this);  
         ConvertState = new NE_ConvertState(this, StateMachine, ANIM_BOOL_CONVERT_HASH, _convertStateData, this); 
@@ -67,16 +65,14 @@ public class NormalEnemy : Entity
         TasteState = new NE_TasteState(this, StateMachine, ANIM_BOOL_TASTE_HASH, _tasteStateData, this);
 
         StateMachine.Initialize(MoveState);
-
-        _gameManager = FindObjectOfType<GameManager>();
     }
 
     public override void Update() {
         base.Update();
 
-        // set conversion bool
-        if (StateMachine.CurrentState != ConvertState) {
-            IsInConversionRange = IsInConvertRange();
+        if (GameManager.Instance.IsOutsidePlaySpace(this.transform.position)) {
+            //TODO: return to pool when I have pools
+            Destroy(gameObject);
         }
     }
 
@@ -132,27 +128,21 @@ public class NormalEnemy : Entity
             }
             else {
                 _feedbackBubble.DisplayFeedback(false);                
-                StartCoroutine(ThrowHotDogRoutine(_currentHotDog));
+                _currentHotDog.DiscardProjectile();
                 HasHotDog = false;
                 MyBoxCollider.enabled = true;                
             }            
         }
     }
 
-    private IEnumerator ThrowHotDogRoutine(HotDog hotDog) {
-        //TODO: finish method
-        yield return new WaitForSeconds(1f);
-        Destroy(hotDog.gameObject);        
-    }
-
     private bool HasAffinityIngredient(HotDog hotDog) {
-        if (hotDog.HotDogData.Bun == _gameManager.NEAffinitiesDict[_enemyType].BunAffinity) {
+        if (hotDog.HotDogData.Bun == GameManager.Instance.NEAffinitiesDict[_enemyType].BunAffinity) {
             return true;
         }        
-        if (hotDog.HotDogData.Dog == _gameManager.NEAffinitiesDict[_enemyType].DogAffinity) {
+        if (hotDog.HotDogData.Dog == GameManager.Instance.NEAffinitiesDict[_enemyType].DogAffinity) {
             return true;
         }
-        if (hotDog.HotDogData.Sauce == _gameManager.NEAffinitiesDict[_enemyType].SauceAffinity) {
+        if (hotDog.HotDogData.Sauce == GameManager.Instance.NEAffinitiesDict[_enemyType].SauceAffinity) {
             return true;
         }
 
@@ -197,5 +187,9 @@ public class NormalEnemy : Entity
         }
 
         _convertBar.AddProgress();        
+    }
+
+    public void SetLaneAssigned(int laneIndex) {
+        LaneAssigned = laneIndex;
     }
 }

@@ -26,11 +26,11 @@ public class NE_TasteState : TasteState
         base.LogicUpdate();
 
         // transition to move state
-        if (!_normalEnemy.HasHotDog && !_normalEnemy.IsSatisfied && !_normalEnemy.IsInConversionRange) {
+        if (!_normalEnemy.HasHotDog && !_normalEnemy.IsSatisfied && !_normalEnemy.IsInConvertRange()) {
             _normalEnemy.StateMachine.ChangeState(_normalEnemy.MoveState);
         }
         // transition to convert state
-        else if (!_normalEnemy.HasHotDog && !_normalEnemy.IsSatisfied && _normalEnemy.IsInConversionRange) {
+        else if (!_normalEnemy.HasHotDog && !_normalEnemy.IsSatisfied && _normalEnemy.IsInConvertRange()) {
             _normalEnemy.StateMachine.ChangeState(_normalEnemy.ConvertState);
         }
         // transition to flee state

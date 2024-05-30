@@ -2,26 +2,48 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEditor.Rendering;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager : Singleton<GameManager>
 {
-    [SerializeField] private int _affinitiesPerNE = 2;
-    public Dictionary<NormalEnemy.NEType, Affinities> NEAffinitiesDict { get; private set; }
+    [SerializeField] private int _affinitiesPerNE = 2;    
+    [SerializeField] private float _playSpaceOffset = 3f;
+    private float _worldBorderX = 7.5f;
+    private float _worldBorderY = 8f;
+    private Camera _mainCamera;
+    
 
-    private void Awake() {
-        //InitializeNEAffinities();
-        AffinitiesTest();
+    public Dictionary<NormalEnemy.NEType, Affinities> NEAffinitiesDict { get; private set; }
+    public EnemySpawner EnemySpawner { get; private set; }
+    public StandController StandController { get; private set; }
+
+    protected override void Awake() {
+        base.Awake();
+
+        InitializeNEAffinities();
+        //AffinitiesTest();
     }
 
-    private void AffinitiesTest() {
-        int n = 5;
-        for (int i = 0; i < n; i++) {
-            InitializeNEAffinities();
-            foreach (var item in NEAffinitiesDict) {
-                Debug.Log($"{item.Key}: {item.Value.BunAffinity}, {item.Value.DogAffinity}, {item.Value.SauceAffinity}");
-            }
+    private void Start() {        
+        _mainCamera = Camera.main;
+        EnemySpawner = FindObjectOfType<EnemySpawner>();
+        StandController = FindObjectOfType<StandController>();
+
+        InitializeWorldBorders();
+    }
+
+    private void InitializeWorldBorders() {
+        if (_mainCamera != null) {
+            Vector3 topRight = _mainCamera.ViewportToWorldPoint(new Vector3 (1, 1, _mainCamera.nearClipPlane));
+            _worldBorderX = topRight.x;
+            _worldBorderY = topRight.y;
+
+            Debug.Log($"World borders initialized at X: {_worldBorderX} and Y: {_worldBorderY}");
+        }
+        else {
+            Debug.Log("Failed to initialize world borders.");
         }
     }
 
@@ -35,7 +57,7 @@ public class GameManager : MonoBehaviour
         var saucesList = Enum.GetValues(typeof(HotDogDataModel.Sauces)).Cast<HotDogDataModel.Sauces>().Where(s => s != HotDogDataModel.Sauces.None).ToList();
 
         // fail-safe if not enough ingredients to distribute
-        //TODO: need to add test if uneven amount of ingredients (min required to distribute)
+        //TODO: need to add test for minReq to distribute if uneven amount of ingredients among cats
         int totalIngredients = bunsList.Count + dogsList.Count + saucesList.Count;
         int reqIngredients = enemyTypesList.Count * _affinitiesPerNE;
         if (totalIngredients < reqIngredients) {
@@ -49,13 +71,15 @@ public class GameManager : MonoBehaviour
         ShuffleList(dogsList);
         ShuffleList(saucesList);
 
-        var allCatsList = new List<object> {
+        var allCatsList = new List<IList> {
             bunsList,
             dogsList,
             saucesList,
         };
 
-        
+        ShuffleList(allCatsList);
+
+        // construct affinity for each enemy        
         foreach (var enemy in enemyTypesList) {         
             var bAffinity = HotDogDataModel.Buns.None;
             var dAffinity = HotDogDataModel.Dogs.None; 
@@ -63,38 +87,40 @@ public class GameManager : MonoBehaviour
 
             int affinitiesAssigned = 0;
 
-            while (affinitiesAssigned < _affinitiesPerNE) {
+            while (affinitiesAssigned < _affinitiesPerNE) {    
+                // assign first element from reordered cat lists            
+                foreach (var cat in allCatsList) {
+                    if (affinitiesAssigned >= _affinitiesPerNE) {
+                        break;
+                    }
 
-                ShuffleList(allCatsList);
-
-                if (allCatsList[0] is List<HotDogDataModel.Buns> && bunsList.Count != 0) {
-                    bAffinity = bunsList[0];  
-                    bunsList.RemoveAt(0);               
-                }
-                else if (allCatsList[0] is List<HotDogDataModel.Dogs> && dogsList.Count != 0) {
-                    dAffinity = dogsList[0];
-                    dogsList.RemoveAt(0);
-                }
-                else if (allCatsList[0] is List<HotDogDataModel.Sauces> && dogsList.Count != 0) {
-                    sAffinity = saucesList[0];
-                    saucesList.RemoveAt(0);
-                }
-
-                int[] countsArray = { bunsList.Count, dogsList.Count, saucesList.Count };
-
-                if (AtLeastNIntsAreNotEqualToX(countsArray, dogsList.Count, _affinitiesPerNE)) {
-                    NEAffinitiesDict = new Dictionary<NormalEnemy.NEType, Affinities>();
-                    Debug.Log("Initialization Failed.");
-                    return;
+                    if (cat.Count > 0) {
+                        if (cat is List<HotDogDataModel.Buns> && bAffinity == HotDogDataModel.Buns.None) {
+                            bAffinity = (HotDogDataModel.Buns)cat[0];
+                            cat.RemoveAt(0);
+                            affinitiesAssigned++;
+                        }
+                        else if (cat is List<HotDogDataModel.Dogs> && dAffinity == HotDogDataModel.Dogs.None) {
+                            dAffinity = (HotDogDataModel.Dogs)cat[0];
+                            cat.RemoveAt(0);
+                            affinitiesAssigned++;
+                        }
+                        else if (cat is List<HotDogDataModel.Sauces> && sAffinity == HotDogDataModel.Sauces.None) {
+                            sAffinity = (HotDogDataModel.Sauces)cat[0];
+                            cat.RemoveAt(0);
+                            affinitiesAssigned++;
+                        }
+                    }
                 }
             }
 
-            var affinities = new Affinities(bAffinity, dAffinity, sAffinity);
+            NEAffinitiesDict.Add(enemy, new Affinities(bAffinity, dAffinity, sAffinity));
 
-            NEAffinitiesDict.Add(enemy, affinities);
+            // re-sort to optimize ingredient distribution so cats with more elements get assigned first 
+            allCatsList = allCatsList.OrderByDescending(list => list.Count).ToList();
         }
 
-        Debug.Log("Initilization Succesfull.");
+        Debug.Log("Normal enemies affinities initilization succesfull.");
     }
 
     private void ShuffleList<T>(List<T> list) {
@@ -106,19 +132,26 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private bool AtLeastNIntsAreNotEqualToX(int[] numbers, int x, int minCount) {
-        int count = 0;
-        
-        foreach (int num in numbers) {
-            if (num != x) {
-                count++;
-                if (count >= minCount) {
-                    return true;
-                }
-            }
-        }
+    public void ConversionDone(NormalEnemy.NEType enemyType) {
+        // freeze time
+        // trigger game over transition
+        // load game over screen (based on enemy type)
+    }
 
+    public bool IsOutsidePlaySpace(Vector3 pos) {
+        if (pos.x > _worldBorderX + _playSpaceOffset) {
+            return true;
+        }
+        if (pos.x < -_worldBorderX - _playSpaceOffset) {
+            return true;
+        }
+        if (pos.y > _worldBorderY + _playSpaceOffset) {
+            return true;
+        }
+        if (pos.y < -_worldBorderY - _playSpaceOffset) {
+            return true;
+        }
+        
         return false;
     }
 }
-

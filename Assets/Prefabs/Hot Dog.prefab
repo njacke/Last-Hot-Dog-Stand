@@ -399,7 +399,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _projectileSpeed: 5
-  _moveToParentDuration: 0.25
+  _moveToParentDuration: 0.5
+  _discardMinDistance: 1.5
+  _discardMaxDistance: 2
+  _discardMinDirAngle: 0
+  _discardMaxDirAngle: 30
+  _discardBaseArcHeight: 0.5
+  _discardBaseDuration: 1
   _hotDogSpritesData: {fileID: 11400000, guid: ab81b2620bea4d447bd93ece8a1c8868, type: 2}
   _bunSpriteRenderer: {fileID: 5562181159617340661}
   _dogSpriteRenderer: {fileID: 3807629793374360671}

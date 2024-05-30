@@ -19,15 +19,11 @@ public class HotDogPreviewer : MonoBehaviour
     private Dictionary<HotDogDataModel.Dogs, Sprite> _dogSpritesDict;
     private Dictionary<HotDogDataModel.Sauces, Sprite> _sauceSpritesDict;
 
-    private StandController _standController;
-
     private void Awake() {
         InitializeSpriteDicts();        
     }
 
     private void Start() {
-        _standController = FindObjectOfType<StandController>();
-
         UpdatePreviewSprites(); 
     }
 
@@ -63,7 +59,8 @@ public class HotDogPreviewer : MonoBehaviour
     }
 
     private void UpdatePreviewSprites() {
-        var currentHotDogData = _standController.CurrentHotDogData;
+        Debug.Log("Action event triggered");
+        var currentHotDogData = GameManager.Instance.StandController.CurrentHotDogData;
 
         _bunPreviewSpriteRenderer.sprite = _bunSpritesDict[currentHotDogData.Bun];
         _dogPreviewSpriteRenderer.sprite = _dogSpritesDict[currentHotDogData.Dog];

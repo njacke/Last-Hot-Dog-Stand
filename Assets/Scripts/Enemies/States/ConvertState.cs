@@ -24,7 +24,6 @@ public class ConvertState : State
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-        Debug.Log($"Converting with speed of {_convertStateData.ConversionSpeed}");
     }
 
     public override void PhysicsUpdate()

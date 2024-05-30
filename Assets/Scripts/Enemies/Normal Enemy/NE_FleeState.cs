@@ -16,6 +16,7 @@ public class NE_FleeState : FleeState
         base.Enter();
         _direction = GetFleeDirection();
         _normalEnemy.FinishHotDog();
+        GameManager.Instance.EnemySpawner.ClearEnemyFromLane(_normalEnemy.LaneAssigned);
     }
 
     public override void Exit()

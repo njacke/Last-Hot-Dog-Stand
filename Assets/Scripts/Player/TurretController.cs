@@ -36,7 +36,8 @@ public class TurretController : MonoBehaviour
         newHotDog.UpdateSprites();
 
         newHotDog.MoveDirection = moveDirection;
-
+        
+        _standController.StartAllCooldowns();
         _standController.ResetCurrentHotDogData();
     }
 
