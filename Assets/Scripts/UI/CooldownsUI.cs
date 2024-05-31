@@ -121,11 +121,10 @@ public class CooldownsUI : MonoBehaviour
         }        
     }
 
-    private void TriggerWarning(Enum ingredientType, string message) {
+    private void TriggerWarning(Enum ingredientType, WarningDisplayUI.WarningType warningType) {
         if (_typeConvertDict.TryGetValue(ingredientType, out var cdType)) {
             if (cdType != Cooldown.CDType.None) {
                 _cdTypeGameObjects[cdType].GetComponentInChildren<SkillWarningUI>().ShowWarning();
-                Debug.Log(message);
             }   
             else {
                 Debug.Log("Type None was passed in CooldownsUI.TriggerWarning");
@@ -137,7 +136,7 @@ public class CooldownsUI : MonoBehaviour
     }
 
     private void UpdateSprite(Cooldown.CDType cdType, int spriteIndex) {
-        Debug.Log(cdType.ToString());
+        //Debug.Log(cdType.ToString() + "Update Sprite called");
         if (cdType != Cooldown.CDType.None) {    
             var newSprite = _cdTypeSpritesDict[cdType][spriteIndex];
             _cdTypeGameObjects[cdType].GetComponent<Image>().sprite = newSprite;

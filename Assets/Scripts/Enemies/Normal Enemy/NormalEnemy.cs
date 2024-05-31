@@ -1,9 +1,6 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Assertions.Must;
 
 public class NormalEnemy : Entity
 {
@@ -38,6 +35,8 @@ public class NormalEnemy : Entity
     public NE_FleeState FleeState { get; private set; }
     public NE_TasteState TasteState { get; private set; }
 
+    public static event Action<NormalEnemy.NEType, Enum> OnIngredientTasted;
+
     public enum NEType {
         Businessman,
         Lawyer,
@@ -57,14 +56,21 @@ public class NormalEnemy : Entity
     public override void Start() {
         base.Start();
 
+        // flip sprite
+        if (this.transform.position.x < 0f) {
+            GetComponent<SpriteRenderer>().flipX = true;
+        }
+
         _convertBar.gameObject.SetActive(false);
 
+        // setup state machine
         MoveState = new NE_MoveState(this, StateMachine, ANIM_BOOL_MOVE_HASH, _moveStateData, this);  
         ConvertState = new NE_ConvertState(this, StateMachine, ANIM_BOOL_CONVERT_HASH, _convertStateData, this); 
         FleeState = new NE_FleeState (this, StateMachine, ANIM_BOOL_FLEE_HASH, _fleeStateData, this);
         TasteState = new NE_TasteState(this, StateMachine, ANIM_BOOL_TASTE_HASH, _tasteStateData, this);
 
         StateMachine.Initialize(MoveState);
+
     }
 
     public override void Update() {
@@ -82,14 +88,7 @@ public class NormalEnemy : Entity
                 StartCoroutine(TasteHotDogRoutine(_currentHotDog));
                 Debug.Log("I was hit by a Hot Dog");
             }
-            StateMachine.ChangeState(TasteState);
         }
-    }
-
-    //TODO: finish with enemy spawner
-    private Vector3 GetMoveTargetPos() {
-        Vector3 turretPosition = FindObjectOfType<TurretController>().transform.position;        
-        return new Vector3 (turretPosition.x, turretPosition.y + 1.5f, + turretPosition.z);
     }
 
     private IEnumerator TasteHotDogRoutine(HotDog hotDog) {
@@ -115,16 +114,17 @@ public class NormalEnemy : Entity
 
     // triggered at top of bite animation
     private void BiteAnimEvent() {
-        Debug.Log("BiteAnimEvent triggered.");
+        //Debug.Log("BiteAnimEvent triggered.");
         _currentHotDog.SetNextState();
     }
 
     private void BiteEndAnimeEvent() {
-        Debug.Log("BiteEndAnimEvent triggered");
+        //Debug.Log("BiteEndAnimEvent triggered");
         if (!IsSatisfied) {
             if (HasAffinityIngredient(_currentHotDog)) {
                 IsSatisfied = true;
                 _feedbackBubble.DisplayFeedback(true);
+                GameManager.Instance.AddScore();
             }
             else {
                 _feedbackBubble.DisplayFeedback(false);                
@@ -136,17 +136,25 @@ public class NormalEnemy : Entity
     }
 
     private bool HasAffinityIngredient(HotDog hotDog) {
+        bool isSatisfied = false;
+
         if (hotDog.HotDogData.Bun == GameManager.Instance.NEAffinitiesDict[_enemyType].BunAffinity) {
-            return true;
+            isSatisfied = true;
+            Debug.Log("Invoking OnIngredientTasted.");
+            OnIngredientTasted?.Invoke(_enemyType, hotDog.HotDogData.Bun);
         }        
         if (hotDog.HotDogData.Dog == GameManager.Instance.NEAffinitiesDict[_enemyType].DogAffinity) {
-            return true;
+            isSatisfied = true;
+            Debug.Log("Invoking OnIngredientTasted.");
+            OnIngredientTasted?.Invoke(_enemyType, hotDog.HotDogData.Dog);
         }
         if (hotDog.HotDogData.Sauce == GameManager.Instance.NEAffinitiesDict[_enemyType].SauceAffinity) {
-            return true;
+            Debug.Log("Invoking OnIngredientTasted.");
+            isSatisfied = true;
+            OnIngredientTasted?.Invoke(_enemyType, hotDog.HotDogData.Sauce);
         }
 
-        return false;
+        return isSatisfied;
     }
 
     public void TasteHotDog() {

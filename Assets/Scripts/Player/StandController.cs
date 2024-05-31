@@ -14,7 +14,7 @@ public class StandController : MonoBehaviour
 
     public HotDogDataModel CurrentHotDogData { get; private set; }
     public static event Action OnIngredientChange;
-    public static event Action <Enum, string> OnIngredientChangeFailed;
+    public static event Action <Enum, WarningDisplayUI.WarningType> OnIngredientChangeFailed;
 
 
     private void Awake() {
@@ -76,13 +76,13 @@ public class StandController : MonoBehaviour
             //Debug.Log($"New ingredient selected: {ingredientType}");
         }
         else if (cooldown.IsOnCooldown) {
-            OnIngredientChangeFailed?.Invoke(ingredientType, "Ingredient is on cooldown!");
+            OnIngredientChangeFailed?.Invoke(ingredientType, WarningDisplayUI.WarningType.OnCD);
         }
     }
 
     private void ChangeBun(HotDogDataModel.Buns bunType) {
         if (CurrentHotDogData.Bun != HotDogDataModel.Buns.None) {
-            OnIngredientChangeFailed?.Invoke(bunType, "Bun already selected!");
+            OnIngredientChangeFailed?.Invoke(bunType, WarningDisplayUI.WarningType.BunSelected);
             return;
         }
 
@@ -91,12 +91,12 @@ public class StandController : MonoBehaviour
 
     private void ChangeDog(HotDogDataModel.Dogs dogType) {
         if (CurrentHotDogData.Bun == HotDogDataModel.Buns.None) {
-            OnIngredientChangeFailed?.Invoke(dogType, "Pick a bun first!");
+            OnIngredientChangeFailed?.Invoke(dogType, WarningDisplayUI.WarningType.BunPick);
             return;
         }
 
         if (CurrentHotDogData.Dog != HotDogDataModel.Dogs.None) {
-            OnIngredientChangeFailed?.Invoke(dogType, "Sausage already selected!");
+            OnIngredientChangeFailed?.Invoke(dogType, WarningDisplayUI.WarningType.DogSelected);
             return;
         }
 
@@ -105,12 +105,12 @@ public class StandController : MonoBehaviour
 
     private void ChangeSauce(HotDogDataModel.Sauces sauceType) {
         if (CurrentHotDogData.Dog == HotDogDataModel.Dogs.None) {
-            OnIngredientChangeFailed?.Invoke(sauceType, "Pick a sausage first!");
+            OnIngredientChangeFailed?.Invoke(sauceType, WarningDisplayUI.WarningType.DogPick);
             return;
         }
 
         if (CurrentHotDogData.Sauce != HotDogDataModel.Sauces.None) {
-            OnIngredientChangeFailed?.Invoke(sauceType, "Sauce was already selected!");
+            OnIngredientChangeFailed?.Invoke(sauceType, WarningDisplayUI.WarningType.SauceSelected);
             return;
         }
 
@@ -135,7 +135,7 @@ public class StandController : MonoBehaviour
         _saucesCooldownsDict = new Dictionary<HotDogDataModel.Sauces, Cooldown> {
             { HotDogDataModel.Sauces.SauceOne, new Cooldown(Cooldown.CDType.SauceOne, _baseCD) },
             { HotDogDataModel.Sauces.SauceTwo, new Cooldown(Cooldown.CDType.SauceTwo, _baseCD) },
-            { HotDogDataModel.Sauces.SauceThree, new Cooldown(Cooldown.CDType.SauceTwo, _baseCD) }
+            { HotDogDataModel.Sauces.SauceThree, new Cooldown(Cooldown.CDType.SauceThree, _baseCD) }
         };
     }
 

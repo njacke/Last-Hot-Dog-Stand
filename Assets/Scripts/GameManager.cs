@@ -2,34 +2,37 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
-using UnityEditor.Rendering;
 using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
+    [SerializeField] private int _targetLevelScore = 10;
     [SerializeField] private int _affinitiesPerNE = 2;    
     [SerializeField] private float _playSpaceOffset = 3f;
     private float _worldBorderX = 7.5f;
     private float _worldBorderY = 8f;
-    private Camera _mainCamera;
-    
+    private int _currentLevelScore = 0;
 
+    private Camera _mainCamera;
+    private LevelProgressUI _levelProgressUI;
+    
     public Dictionary<NormalEnemy.NEType, Affinities> NEAffinitiesDict { get; private set; }
     public EnemySpawner EnemySpawner { get; private set; }
     public StandController StandController { get; private set; }
+    public HotDogPreviewer HotDogPreviewer { get; private set; }
 
     protected override void Awake() {
         base.Awake();
 
         InitializeNEAffinities();
-        //AffinitiesTest();
     }
 
     private void Start() {        
         _mainCamera = Camera.main;
+        _levelProgressUI = FindObjectOfType<LevelProgressUI>();
         EnemySpawner = FindObjectOfType<EnemySpawner>();
         StandController = FindObjectOfType<StandController>();
+        HotDogPreviewer = FindObjectOfType<HotDogPreviewer>();
 
         InitializeWorldBorders();
     }
@@ -153,5 +156,14 @@ public class GameManager : Singleton<GameManager>
         }
         
         return false;
+    }
+
+    public void AddScore() {
+        _currentLevelScore++;
+        _levelProgressUI.UpdateSprite(_currentLevelScore);
+
+        if (_currentLevelScore == _targetLevelScore) {
+            // transition to boss routine
+        }        
     }
 }

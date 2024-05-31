@@ -94,7 +94,7 @@ public class EnemySpawner : MonoBehaviour
 
         _lanesIndexActiveEnemiesDict[laneIndex]++;
 
-        Debug.Log("Enemy spawned on lane: " + laneIndex);
+        //Debug.Log("Enemy spawned on lane: " + laneIndex);
 
         return true;
     }

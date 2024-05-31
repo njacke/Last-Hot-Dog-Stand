@@ -35,7 +35,6 @@ public class MoveState : State
     public virtual void MoveTowardsTargetPos() {
         float distToTarget = Vector3.Distance(_entity.transform.position, _entity.MoveTargetPos);
         if (distToTarget <= _moveStateData.MinTargetDistance) {
-            Debug.Log("Target reached");
             return;
         }
 

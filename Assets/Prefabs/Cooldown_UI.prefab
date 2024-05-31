@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7072872284819242471}
   - component: {fileID: 527863260273517958}
   m_Layer: 5
-  m_Name: Cooldown
+  m_Name: Cooldown_UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -44,8 +44,7 @@ public class Cooldown
 
     public void StartCooldown()
     {
-        if (StartingCooldown > 0f)
-        {
+        if (StartingCooldown > 0f) {
             RemainingCooldown = StartingCooldown;
 
             IsOnCooldown = true;
@@ -54,8 +53,7 @@ public class Cooldown
         }
     }
 
-    public void TrackCooldown()
-    {
+    public void TrackCooldown() {
         if (RemainingCooldown > 0f)
         {
             RemainingCooldown -= Time.deltaTime;

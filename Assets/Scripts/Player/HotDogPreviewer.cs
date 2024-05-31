@@ -66,4 +66,13 @@ public class HotDogPreviewer : MonoBehaviour
         _dogPreviewSpriteRenderer.sprite = _dogSpritesDict[currentHotDogData.Dog];
         _saucePreviewSpriteRenderer.sprite = _sauceSpritesDict[currentHotDogData.Sauce];        
     }
+
+    public Sprite[] GetPreviewSpritesOnDemand(HotDogDataModel hotDogDataModel) {
+        Sprite[] previewSprites = new Sprite[3];
+        previewSprites[0] = _bunSpritesDict[hotDogDataModel.Bun];
+        previewSprites[1] = _dogSpritesDict[hotDogDataModel.Dog];
+        previewSprites[2] = _sauceSpritesDict[hotDogDataModel.Sauce];
+
+        return previewSprites;
+    }
 }
