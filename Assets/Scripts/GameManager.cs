@@ -92,7 +92,7 @@ public class GameManager : Singleton<GameManager>
 
         InitializeWorldBorders();
         
-        GameReset();
+        GameReset(false);
 
         LoadStartScreen();
     }
@@ -291,7 +291,7 @@ public class GameManager : Singleton<GameManager>
 
     public void LoadLevelOne() {
         CurrentGameState = GameState.Level;
-        GameReset();
+        GameReset(false);
         
         GameOverTriggered = false;
         _currentLevelScore = 0;
@@ -332,7 +332,7 @@ public class GameManager : Singleton<GameManager>
 
     public void LoadBoss(bool isTransition) {
         CurrentGameState = GameState.Boss;
-        GameReset();
+        GameReset(isTransition);
 
         GameOverTriggered = false;
         MenuControlsLocked = true;
@@ -377,7 +377,7 @@ public class GameManager : Singleton<GameManager>
         GameOverTriggered = true;
 
         yield return new WaitForSecondsRealtime(_gameOverDelay);
-        GameReset();
+        GameReset(false);
 
         MenuControlsLocked = false;
         _uiCanvas.SetActive(true);
@@ -389,17 +389,17 @@ public class GameManager : Singleton<GameManager>
         _menuDisplayUI.DisplayMenu(MenuDisplayUI.MenuType.GameOver);
     }
 
-    private void GameReset() {
+    private void GameReset(bool isTransition) {
         EnemySpawner.ResetES(false);
         TurretController.ResetTurret();
         StandController.ResetAllCooldowns();
         StandController.ResetCurrentHotDogData();
         HotDogPreviewer.UpdatePreviewSprites();
         _levelProgressUI.UpdateSprite(_currentLevelScore);
-        DestroyRemainingGameObjects();
+        DestroyRemainingGameObjects(isTransition);
     }
 
-    private void DestroyRemainingGameObjects() {
+    private void DestroyRemainingGameObjects(bool isTransition) {
         var normalEnemies = FindObjectsOfType<NormalEnemy>();
         foreach (var enemy in normalEnemies) {
             Destroy(enemy.gameObject);
@@ -409,12 +409,13 @@ public class GameManager : Singleton<GameManager>
         foreach (var hotDog in hotDogs) {
             Destroy(hotDog.gameObject);
         }
-
-
-        var bosses = FindObjectsOfType<BossEnemy>();
-        foreach (var boss in bosses) {
-            Destroy(boss.gameObject);
-        }       
+        
+        if (isTransition) {
+            var bosses = FindObjectsOfType<BossEnemy>();
+            foreach (var boss in bosses) {
+                Destroy(boss.gameObject);
+            }       
+        }
     }
 
     public void LoadWinScreen() {

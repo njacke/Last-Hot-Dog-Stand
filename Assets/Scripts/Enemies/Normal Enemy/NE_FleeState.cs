@@ -17,7 +17,9 @@ public class NE_FleeState : FleeState
         _direction = GetFleeDirection();
         GameManager.Instance.EnemySpawner.ClearEnemyFromLane(_normalEnemy.LaneAssigned);
         _normalEnemy.HideSprite();
-        _normalEnemy.CurrentHotDog.HideSprite();
+        if (_normalEnemy.HasHotDog) {
+            _normalEnemy.CurrentHotDog.HideSprite();
+        }
         
         if (_normalEnemy.HasHotDog && GameManager.Instance.CurrentGameState == GameManager.GameState.Level) {
             _normalEnemy.FinishHotDog();
