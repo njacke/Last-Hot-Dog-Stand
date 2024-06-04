@@ -32,4 +32,9 @@ public class ConvertBar : MonoBehaviour
         _currentProgress += _progressIncrement;     
         UpdateDisplay(); 
     }
+
+    public void ResetProgress() {
+        _currentProgress = 0f;
+
+    }
 }

@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5af23de13ad9341448a6f825183ebaa2, type: 3}
   m_Name: BE_MoveStateData
   m_EditorClassIdentifier: 
-  MoveSpeed: 1
-  MinTargetDistance: 0.5
+  MoveSpeed: 0.3
+  MinTargetDistance: 0.125

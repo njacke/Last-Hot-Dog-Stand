@@ -12,18 +12,21 @@ public class NormalEnemy : Entity
     [SerializeField] private float _tasteDelay = 0.5f;
     [SerializeField] private float _biteDelay = 0.75f;
     [SerializeField] private float _finishDelay = 1f;
+    [SerializeField] private int _hideLayerOrder  = -1; 
     [SerializeField] private NEType _enemyType; 
 
+    private SpriteRenderer _spriteRenderer;
     private FeedbackBubble _feedbackBubble;
     private ConvertBar _convertBar;
-    private HotDog _currentHotDog;
 
     private readonly int ANIM_BOOL_MOVE_HASH = Animator.StringToHash("Move");
     private readonly int ANIM_BOOL_CONVERT_HASH = Animator.StringToHash("Convert");
     private readonly int ANIM_BOOL_FLEE_HASH = Animator.StringToHash("Flee");
     private readonly int ANIM_BOOL_TASTE_HASH = Animator.StringToHash("Taste");
-    private readonly int ANIM_TRIGGER_BITE_HASH = Animator.StringToHash("Bite");
+    private readonly int ANIM_BOOL_BITE_HASH = Animator.StringToHash("Bite");
+    private readonly int ANIM_BOOL_EAT_HASH = Animator.StringToHash("Eat");
 
+    public HotDog CurrentHotDog {get; set; }
     public int LaneAssigned { get; private set; }
     public bool HasHotDog { get; private set; } = false;
     public bool IsSatisfied { get; private set; } = false;
@@ -38,10 +41,10 @@ public class NormalEnemy : Entity
     public static event Action<NormalEnemy.NEType, Enum> OnIngredientTasted;
 
     public enum NEType {
-        Businessman,
         Lawyer,
+        Businessman,
         Critic,
-        Inspector
+        Inspector,
     }
 
     public override void Awake()
@@ -49,6 +52,7 @@ public class NormalEnemy : Entity
         base.Awake();
 
         MyBoxCollider = GetComponent<BoxCollider2D>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
         _feedbackBubble = GetComponentInChildren<FeedbackBubble>();
         _convertBar = GetComponentInChildren<ConvertBar>();
     }
@@ -83,16 +87,15 @@ public class NormalEnemy : Entity
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
-        if (_currentHotDog = other.GetComponent<HotDog>()) {
+        if (CurrentHotDog = other.GetComponent<HotDog>()) {
             if (!HasHotDog) {
-                StartCoroutine(TasteHotDogRoutine(_currentHotDog));
+                HasHotDog = true;
                 Debug.Log("I was hit by a Hot Dog");
             }
         }
     }
 
     private IEnumerator TasteHotDogRoutine(HotDog hotDog) {
-        HasHotDog = true;
         MyBoxCollider.enabled = false;
         hotDog.MyCapsuleCollider.enabled = false;
         hotDog.HasHit = true;
@@ -101,38 +104,39 @@ public class NormalEnemy : Entity
 
         yield return new WaitForSeconds(_tasteDelay);
 
-        SetAnimBiteTrigger();        
+        Anim.SetBool(ANIM_BOOL_BITE_HASH, true);
     }
 
     private IEnumerator FinishHotDogRoutine() {
         yield return new WaitForSeconds(_finishDelay);
-        SetAnimBiteTrigger();
+        Anim.SetBool(ANIM_BOOL_BITE_HASH, true);
 
         yield return new WaitForSeconds(_biteDelay);
-        SetAnimBiteTrigger();
+        Anim.SetBool(ANIM_BOOL_BITE_HASH, true);
     }
 
     // triggered at top of bite animation
     private void BiteAnimEvent() {
         //Debug.Log("BiteAnimEvent triggered.");
-        _currentHotDog.SetNextState();
+        CurrentHotDog.SetNextState();
     }
 
-    private void BiteEndAnimeEvent() {
+    private void BiteEndAnimEvent() {
         //Debug.Log("BiteEndAnimEvent triggered");
-        if (!IsSatisfied) {
-            if (HasAffinityIngredient(_currentHotDog)) {
+        if (!IsSatisfied && GameManager.Instance.CurrentGameState == GameManager.GameState.Level) {
+            if (HasAffinityIngredient(CurrentHotDog)) {
                 IsSatisfied = true;
                 _feedbackBubble.DisplayFeedback(true);
                 GameManager.Instance.AddScore();
             }
             else {
                 _feedbackBubble.DisplayFeedback(false);                
-                _currentHotDog.DiscardProjectile();
+                CurrentHotDog.DiscardProjectile();
                 HasHotDog = false;
                 MyBoxCollider.enabled = true;                
-            }            
+            }
         }
+        Anim.SetBool(ANIM_BOOL_BITE_HASH, false);
     }
 
     private bool HasAffinityIngredient(HotDog hotDog) {
@@ -140,16 +144,13 @@ public class NormalEnemy : Entity
 
         if (hotDog.HotDogData.Bun == GameManager.Instance.NEAffinitiesDict[_enemyType].BunAffinity) {
             isSatisfied = true;
-            Debug.Log("Invoking OnIngredientTasted.");
             OnIngredientTasted?.Invoke(_enemyType, hotDog.HotDogData.Bun);
         }        
         if (hotDog.HotDogData.Dog == GameManager.Instance.NEAffinitiesDict[_enemyType].DogAffinity) {
             isSatisfied = true;
-            Debug.Log("Invoking OnIngredientTasted.");
             OnIngredientTasted?.Invoke(_enemyType, hotDog.HotDogData.Dog);
         }
         if (hotDog.HotDogData.Sauce == GameManager.Instance.NEAffinitiesDict[_enemyType].SauceAffinity) {
-            Debug.Log("Invoking OnIngredientTasted.");
             isSatisfied = true;
             OnIngredientTasted?.Invoke(_enemyType, hotDog.HotDogData.Sauce);
         }
@@ -158,15 +159,11 @@ public class NormalEnemy : Entity
     }
 
     public void TasteHotDog() {
-        StartCoroutine(TasteHotDogRoutine(_currentHotDog));
+        StartCoroutine(TasteHotDogRoutine(CurrentHotDog));
     }
 
     public void FinishHotDog() {
         StartCoroutine(FinishHotDogRoutine());
-    }
-
-    public void SetAnimBiteTrigger() {
-        Anim.SetTrigger(ANIM_TRIGGER_BITE_HASH);
     }
 
     public bool IsInConvertRange() {
@@ -189,9 +186,8 @@ public class NormalEnemy : Entity
     }
 
     public void AddConversionProgress() {
-        if (_convertBar.IsProgressCompleted) {
-            //call game over
-            return;
+        if (_convertBar.IsProgressCompleted && !GameManager.Instance.GameOverTriggered) {
+            GameManager.Instance.LoadGameOverFromGame( _enemyType);
         }
 
         _convertBar.AddProgress();        
@@ -199,5 +195,9 @@ public class NormalEnemy : Entity
 
     public void SetLaneAssigned(int laneIndex) {
         LaneAssigned = laneIndex;
+    }
+
+    public void HideSprite() {
+        _spriteRenderer.sortingOrder = _hideLayerOrder;
     }
 }

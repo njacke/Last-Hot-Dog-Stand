@@ -2,24 +2,54 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Serialization;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager>
 {
     [SerializeField] private int _targetLevelScore = 10;
     [SerializeField] private int _affinitiesPerNE = 2;    
     [SerializeField] private float _playSpaceOffset = 3f;
+    [SerializeField] private float _gameOverDelay = 1f;
+    [SerializeField] private float _defaultMusicVolume = .8f;
+    [SerializeField] private AudioSource _musicPlayer;
     private float _worldBorderX = 7.5f;
     private float _worldBorderY = 8f;
     private int _currentLevelScore = 0;
+    private bool firstLvlOneLoaded = false;
 
     private Camera _mainCamera;
+    private GameObject _menuCanvas;
+    private GameObject _uiCanvas;
+    private GameObject _cinematicCanvas;
     private LevelProgressUI _levelProgressUI;
+    private MenuDisplayUI _menuDisplayUI;
+    private CinematicUI _cinematicUI;
+
+    private readonly string MENU_CANVAS_NAME_STRING = "Menu Canvas";
+    private readonly string UI_CANVAS_NAME_STRING = "UI Canvas";
+    private readonly string UI_CINEMATIC_NAME_STRING = "Cinematic Canvas";
     
+    public GameState CurrentGameState { get; private set; }
+    public NormalEnemy.NEType LastDeathTrigger { get; private set; } = NormalEnemy.NEType.Lawyer;
+    public bool PlayerControlsLocked { get; private set; } = true;
+    public bool MenuControlsLocked { get; private set; } = true;
     public Dictionary<NormalEnemy.NEType, Affinities> NEAffinitiesDict { get; private set; }
     public EnemySpawner EnemySpawner { get; private set; }
     public StandController StandController { get; private set; }
     public HotDogPreviewer HotDogPreviewer { get; private set; }
+    public TurretController TurretController { get; private set; }
+    public BossManager BossManager { get; private set; }
+    public bool GameOverTriggered { get; private set; } = false;
+
+    public enum GameState {
+        None,
+        Intro,
+        Level,
+        Boss,
+        BossTransition,
+    }
 
     protected override void Awake() {
         base.Awake();
@@ -27,14 +57,44 @@ public class GameManager : Singleton<GameManager>
         InitializeNEAffinities();
     }
 
-    private void Start() {        
+    private void Start()
+    {
+        GameStartInitialization();
+    }
+
+    private void OnEnable() {
+        CinematicUI.OnTitleDrop += PlaySoundtrack;
+    }
+
+    private void OnDisable() {
+        CinematicUI.OnTitleDrop -= PlaySoundtrack;        
+    }
+
+    private void GameStartInitialization()
+    {
+        // UI and camera references
         _mainCamera = Camera.main;
-        _levelProgressUI = FindObjectOfType<LevelProgressUI>();
+
+        _menuCanvas = GameObject.Find(MENU_CANVAS_NAME_STRING);
+        _uiCanvas = GameObject.Find(UI_CANVAS_NAME_STRING);
+        _cinematicCanvas = GameObject.Find(UI_CINEMATIC_NAME_STRING);
+
+        _menuDisplayUI = _menuCanvas.GetComponentInChildren<MenuDisplayUI>();
+        _levelProgressUI = _uiCanvas.GetComponentInChildren<LevelProgressUI>();
+        _cinematicUI = _cinematicCanvas.GetComponentInChildren<CinematicUI>();
+
+        // Game object references
         EnemySpawner = FindObjectOfType<EnemySpawner>();
         StandController = FindObjectOfType<StandController>();
+        TurretController = FindObjectOfType<TurretController>();
         HotDogPreviewer = FindObjectOfType<HotDogPreviewer>();
+        BossManager = FindObjectOfType<BossManager>();
 
         InitializeWorldBorders();
+        
+        GameReset();
+
+        LoadStartScreen();
     }
 
     private void InitializeWorldBorders() {
@@ -162,8 +222,224 @@ public class GameManager : Singleton<GameManager>
         _currentLevelScore++;
         _levelProgressUI.UpdateSprite(_currentLevelScore);
 
-        if (_currentLevelScore == _targetLevelScore) {
-            // transition to boss routine
-        }        
+        if (_currentLevelScore == _targetLevelScore && !GameOverTriggered) {
+            LoadBossTransition();
+        }
+    }
+
+    private void LoadStartScreen() {
+        CurrentGameState = GameState.Intro;
+        _menuCanvas.SetActive(true);
+        _uiCanvas.SetActive(false);
+        _cinematicCanvas.SetActive(false);
+
+        PlayerControlsLocked = true;
+        MenuControlsLocked = false;
+
+        _menuDisplayUI.DisplayMenu(MenuDisplayUI.MenuType.StartScreen);
+
+    }
+
+    public void LoadIntroCinematic() {
+        PlayerControlsLocked = true;
+        MenuControlsLocked = true;
+
+        _menuCanvas.SetActive(false);
+        _uiCanvas.SetActive(true);
+        _cinematicCanvas.SetActive(true);
+
+        _menuDisplayUI.HideAllMenus();
+
+        _cinematicUI.PlayCinematic();       
+
+    }
+
+    public void LoadInstructions() {
+        PlayerControlsLocked = true;
+        MenuControlsLocked = false;
+
+        _menuCanvas.SetActive(true);
+        _uiCanvas.SetActive(true);
+        _cinematicCanvas.SetActive(false);
+
+        _menuDisplayUI.DisplayMenu(MenuDisplayUI.MenuType.Instructions);
+
+    }
+
+    public void LoadControlsIntro() {
+        PlayerControlsLocked = true;
+        MenuControlsLocked = false;
+
+        _menuCanvas.SetActive(true);
+        _uiCanvas.SetActive(true);
+        _cinematicCanvas.SetActive(false);
+
+        _menuDisplayUI.DisplayMenu(MenuDisplayUI.MenuType.ControlsIntro);
+
+    }
+
+    public void LoadControlsGame() {
+        PlayerControlsLocked = true;
+        MenuControlsLocked = false;
+
+        _menuCanvas.SetActive(true);
+        _uiCanvas.SetActive(true);
+        _cinematicCanvas.SetActive(false);
+
+        _menuDisplayUI.DisplayMenu(MenuDisplayUI.MenuType.ControlsGame);
+    }
+
+    public void LoadLevelOne() {
+        CurrentGameState = GameState.Level;
+        GameReset();
+        
+        GameOverTriggered = false;
+        _currentLevelScore = 0;
+        _levelProgressUI.UpdateSprite(_currentLevelScore);
+        EnemySpawner.ResetES(true);
+
+        MenuControlsLocked = true;
+        PlayerControlsLocked = false;
+
+        _uiCanvas.SetActive(true);
+        _menuCanvas.SetActive(false);
+        _cinematicCanvas.SetActive(false);
+
+        if (firstLvlOneLoaded) {
+            PlaySoundtrack(true, _defaultMusicVolume);
+        }
+
+        firstLvlOneLoaded = true;
+    }
+
+    public void LoadBossTransition() {
+        CurrentGameState = GameState.BossTransition;
+        MenuControlsLocked = true;
+        PlayerControlsLocked = true;
+
+        _uiCanvas.SetActive(true);
+        _menuCanvas.SetActive(false);
+        _cinematicCanvas.SetActive(false);
+
+        BossManager.StartTransition();
+
+        TurretController.ResetTurret();
+        StandController.ResetAllCooldowns();
+        StandController.ResetCurrentHotDogData();
+
+        _musicPlayer.volume = BossManager.TransitionMusicVolume;
+    }
+
+    public void LoadBoss(bool isTransition) {
+        CurrentGameState = GameState.Boss;
+        GameReset();
+
+        GameOverTriggered = false;
+        MenuControlsLocked = true;
+        PlayerControlsLocked = false;
+
+        _uiCanvas.SetActive(true);
+        _menuCanvas.SetActive(false);
+        _cinematicCanvas.SetActive(false);
+
+
+        BossManager.InstantiateBossAtFightPos();
+
+        if (!isTransition) {
+            PlaySoundtrack(true, _defaultMusicVolume);
+        }
+        else {
+            _musicPlayer.volume = _defaultMusicVolume;
+        }
+    }
+
+    public void LoadGameOverFromMenu() {
+        PlayerControlsLocked = true;
+        MenuControlsLocked = false;
+
+        _uiCanvas.SetActive(true);
+        _menuCanvas.SetActive(true);
+        _cinematicCanvas.SetActive(false);
+
+        PlaySoundtrack(false, _defaultMusicVolume);
+
+        _menuDisplayUI.DisplayMenu(MenuDisplayUI.MenuType.GameOver);
+    }
+
+    public void LoadGameOverFromGame(NormalEnemy.NEType enemyType) {
+        StartCoroutine(LoadGameOverWithDelayRoutine(enemyType));
+    }
+
+    private IEnumerator LoadGameOverWithDelayRoutine(NormalEnemy.NEType enemyType)
+    {
+        PlayerControlsLocked = true;
+        LastDeathTrigger = enemyType;
+        GameOverTriggered = true;
+
+        yield return new WaitForSecondsRealtime(_gameOverDelay);
+        GameReset();
+
+        MenuControlsLocked = false;
+        _uiCanvas.SetActive(true);
+        _menuCanvas.SetActive(true);
+        _cinematicCanvas.SetActive(false);
+
+        PlaySoundtrack(false, 0f);
+
+        _menuDisplayUI.DisplayMenu(MenuDisplayUI.MenuType.GameOver);
+    }
+
+    private void GameReset() {
+        EnemySpawner.ResetES(false);
+        TurretController.ResetTurret();
+        StandController.ResetAllCooldowns();
+        StandController.ResetCurrentHotDogData();
+        HotDogPreviewer.UpdatePreviewSprites();
+        _levelProgressUI.UpdateSprite(_currentLevelScore);
+        DestroyRemainingGameObjects();
+    }
+
+    private void DestroyRemainingGameObjects() {
+        var normalEnemies = FindObjectsOfType<NormalEnemy>();
+        foreach (var enemy in normalEnemies) {
+            Destroy(enemy.gameObject);
+        }
+
+        var hotDogs = FindObjectsOfType<HotDog>();
+        foreach (var hotDog in hotDogs) {
+            Destroy(hotDog.gameObject);
+        }
+
+
+        var bosses = FindObjectsOfType<BossEnemy>();
+        foreach (var boss in bosses) {
+            Destroy(boss.gameObject);
+        }       
+    }
+
+    public void LoadWinScreen() {
+        PlayerControlsLocked = true;
+        MenuControlsLocked = false;
+
+        _uiCanvas.SetActive(true);
+        _menuCanvas.SetActive(true);
+        _cinematicCanvas.SetActive(false);
+
+        _menuDisplayUI.DisplayMenu(MenuDisplayUI.MenuType.WinScreen);
+    }
+
+    public void ReloadGame() {
+        SceneManager.LoadScene(0);
+    }
+
+    private void PlaySoundtrack(bool isActive, float volume) {
+        if (isActive) {
+            _musicPlayer.loop = true;
+            _musicPlayer.volume = volume;
+            _musicPlayer.Play();
+        }
+        else {
+            _musicPlayer.Stop();
+        }
     }
 }

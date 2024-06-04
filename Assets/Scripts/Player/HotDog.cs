@@ -5,6 +5,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Android;
+using UnityEngine.Rendering;
 
 public class HotDog : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class HotDog : MonoBehaviour
     [SerializeField] private float _discardMaxDirAngle = 30f;
     [SerializeField] private float _discardBaseArcHeight = .5f;
     [SerializeField] private float _discardBaseDuration = 1f;
+    [SerializeField] private int _hideLayerOrder = -1;
 
     [SerializeField] private HotDogSpritesData _hotDogSpritesData;
     [SerializeField] private SpriteRenderer _bunSpriteRenderer;
@@ -39,6 +41,7 @@ public class HotDog : MonoBehaviour
     public bool HasHit { get; set; } = false;
     public bool IsDiscarded { get; set; } = false;
     public HotDogDataModel HotDogData { get; set; }
+    public SortingGroup SortingGroup { get; private set; }
 
     private void Awake() {
         _rb = GetComponent<Rigidbody2D>();
@@ -46,6 +49,7 @@ public class HotDog : MonoBehaviour
         MyCapsuleCollider = GetComponent<CapsuleCollider2D>();
 
         HotDogData = new HotDogDataModel(HotDogDataModel.Buns.None, HotDogDataModel.Dogs.None, HotDogDataModel.Sauces.None);
+        SortingGroup = GetComponent<SortingGroup>();
 
         InitializeSpriteDicts();
     }
@@ -70,35 +74,21 @@ public class HotDog : MonoBehaviour
     }
 
     private IEnumerator DiscardProjectileRoutine() {
-        // Remove hot dog from holder parent
         this.transform.SetParent(null);
 
-        // Debugging info
         Debug.Log("Discarding projectile...");
 
-        // Calculate discard distance and duration
         var dist = UnityEngine.Random.Range(_discardMinDistance, _discardMaxDistance);
         var arcHeight = dist / _discardMinDistance * _discardBaseArcHeight;
         var dur = dist / _discardMinDistance * _discardBaseDuration;
 
-        // Calculate direction angle and ensure it's properly randomized for both left and right
         var angle = UnityEngine.Random.Range(_discardMinDirAngle, _discardMaxDirAngle);
-        Debug.Log("Initial angle: " + angle);
         if (UnityEngine.Random.Range(0, 2) == 0) {
             angle = 180 -angle;
         }
 
-        Debug.Log("Angle after flip: " + angle);
-
         var dir = new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad), 0);
-
-        Debug.Log("Current position: " + this.transform.position);
-
-        Debug.Log("Direciton vector: " + dir);
-
         var targetPos = this.transform.position + dir * dist;
-
-        Debug.Log("Target position: " + targetPos);
 
         float timePassed = 0f;
         Vector3 startPos = this.transform.position;
@@ -255,5 +245,9 @@ public class HotDog : MonoBehaviour
 
     public void DiscardProjectile() {
         StartCoroutine(DiscardProjectileRoutine());
+    }
+
+    public void HideSprite() {
+        SortingGroup.sortingOrder = _hideLayerOrder;
     }
 }

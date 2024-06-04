@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: NE_ConvertStateData
   m_EditorClassIdentifier: 
   MinConversionRange: 1
-  ConversionSpeed: 1
+  ConversionSpeed: 1.5

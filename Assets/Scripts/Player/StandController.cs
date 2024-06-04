@@ -24,7 +24,9 @@ public class StandController : MonoBehaviour
     }
 
     private void Update() {
-        PlayerInput();
+        if (!GameManager.Instance.PlayerControlsLocked) {
+            PlayerInput();
+        }
 
         TrackCooldowns(_dogsCooldownsDict);
         TrackCooldowns(_bunsCooldownsDict);
@@ -142,6 +144,18 @@ public class StandController : MonoBehaviour
     private void TrackCooldowns<T>(Dictionary<T, Cooldown> cooldowns) {
         foreach (var cooldown in cooldowns.Values) {
             cooldown.TrackCooldown();
+        }
+    }
+
+    public void ResetAllCooldowns() {
+        foreach (var cd in _bunsCooldownsDict) {
+            cd.Value.ResetCooldown();
+        }
+        foreach (var cd in _dogsCooldownsDict) {
+            cd.Value.ResetCooldown();
+        }
+        foreach (var cd in _saucesCooldownsDict) {
+            cd.Value.ResetCooldown();
         }
     }
     

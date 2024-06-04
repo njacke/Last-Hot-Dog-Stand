@@ -105,7 +105,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 3c78b49dfbbd0d343b07cfd11009c241, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 68bf9c00d82dca6479c29088d3f8d54d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -129,8 +129,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _displayTime: 1
-  _positiveSprite: {fileID: 21300000, guid: 564a40182ff928949b21b24ce2d66bda, type: 3}
-  _negativeSprite: {fileID: 21300000, guid: 3c78b49dfbbd0d343b07cfd11009c241, type: 3}
+  _positiveSprite: {fileID: 21300000, guid: 26a4f8f5cf6343d4ba9e158f19fbf943, type: 3}
+  _negativeSprite: {fileID: 21300000, guid: 68bf9c00d82dca6479c29088d3f8d54d, type: 3}
 --- !u!1 &4728668546112212676
 GameObject:
   m_ObjectHideFlags: 0
@@ -229,11 +229,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sprites:
-  - {fileID: -70749108, guid: f53f18ee34a15a341a6fb90ef965c282, type: 3}
-  - {fileID: 1399158524, guid: f53f18ee34a15a341a6fb90ef965c282, type: 3}
-  - {fileID: 384467774, guid: f53f18ee34a15a341a6fb90ef965c282, type: 3}
-  - {fileID: -1109742248, guid: f53f18ee34a15a341a6fb90ef965c282, type: 3}
-  - {fileID: 2027019215, guid: f53f18ee34a15a341a6fb90ef965c282, type: 3}
+  - {fileID: 2015897003, guid: fdedcc5f7319cce4ab88616162914c95, type: 3}
+  - {fileID: 249587451, guid: fdedcc5f7319cce4ab88616162914c95, type: 3}
+  - {fileID: 650842415, guid: fdedcc5f7319cce4ab88616162914c95, type: 3}
+  - {fileID: 580417947, guid: fdedcc5f7319cce4ab88616162914c95, type: 3}
+  - {fileID: 341702097, guid: fdedcc5f7319cce4ab88616162914c95, type: 3}
 --- !u!1 &7410245868309438302
 GameObject:
   m_ObjectHideFlags: 0
@@ -314,7 +314,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 10e3b1276c76b384282368cd88aef1a8, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c722e6f9566621245a025962c639b661, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -417,7 +417,8 @@ MonoBehaviour:
   _tasteDelay: 0.5
   _biteDelay: 0.75
   _finishDelay: 1
-  _enemyType: 1
+  _hideLayerOrder: -2
+  _enemyType: 0
 --- !u!95 &8345206036515592454
 Animator:
   serializedVersion: 5

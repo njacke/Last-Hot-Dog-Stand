@@ -42,6 +42,12 @@ public class Cooldown
         _thresholdsReached = new bool[_progressThresholds.Length];
     }
 
+    public void ResetCooldown() {
+        RemainingCooldown = 0f;
+        IsOnCooldown = false;
+        OnCooldownThresholdReached?.Invoke(CooldownType, _notOnCDSpriteIndex);
+    }
+
     public void StartCooldown()
     {
         if (StartingCooldown > 0f) {

@@ -417,7 +417,8 @@ MonoBehaviour:
   _tasteDelay: 0.5
   _biteDelay: 0.75
   _finishDelay: 1
-  _enemyType: 1
+  _hideLayerOrder: -2
+  _enemyType: 0
 --- !u!95 &8345206036515592454
 Animator:
   serializedVersion: 5

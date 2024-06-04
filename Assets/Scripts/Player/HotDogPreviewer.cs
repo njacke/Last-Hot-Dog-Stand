@@ -23,10 +23,6 @@ public class HotDogPreviewer : MonoBehaviour
         InitializeSpriteDicts();        
     }
 
-    private void Start() {
-        UpdatePreviewSprites(); 
-    }
-
     private void OnEnable() {
         StandController.OnIngredientChange += UpdatePreviewSprites;
     }
@@ -58,8 +54,8 @@ public class HotDogPreviewer : MonoBehaviour
         };        
     }
 
-    private void UpdatePreviewSprites() {
-        Debug.Log("Action event triggered");
+    public void UpdatePreviewSprites() {
+        //Debug.Log("Action event triggered");
         var currentHotDogData = GameManager.Instance.StandController.CurrentHotDogData;
 
         _bunPreviewSpriteRenderer.sprite = _bunSpritesDict[currentHotDogData.Bun];

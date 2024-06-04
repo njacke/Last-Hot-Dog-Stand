@@ -1,7 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Microsoft.Unity.VisualStudio.Editor;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class WishBubble : MonoBehaviour
@@ -32,14 +30,14 @@ public class WishBubble : MonoBehaviour
 
         Sprite[] hotDogPreviews = GameManager.Instance.HotDogPreviewer.GetPreviewSpritesOnDemand(hotDogModel);
         
-        yield return new WaitForSeconds(_displayDelay);
+        yield return new WaitForSecondsRealtime(_displayDelay);
         
         _spriteRenderer.enabled = true;
         _spriteRenderer.sprite = _bubble1Sprite;
-        yield return new WaitForSeconds(_displayTime / 2);
+        yield return new WaitForSecondsRealtime(_displayTime / 2);
         
         _spriteRenderer.sprite = _bubble2Sprite;
-        yield return new WaitForSeconds(_displayTime / 2);
+        yield return new WaitForSecondsRealtime(_displayTime / 2);
 
         _spriteRenderer.sprite = _bubble3Sprite;
 
@@ -53,7 +51,7 @@ public class WishBubble : MonoBehaviour
     }
 
     public void DisplayWish(HotDogDataModel hotDogModel){
-        Debug.Log("Display wish triggered");
+        //Debug.Log("Display wish triggered");
         StartCoroutine(DisplayWishRoutine(hotDogModel));
     }
 

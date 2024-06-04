@@ -19,13 +19,12 @@ public class EnemySpawner : MonoBehaviour
     private Dictionary<int, Vector3> _lanesIndexTargetsDict;
     private Dictionary<int, int> _lanesIndexActiveEnemiesDict;
 
-    private void Awake() {
-        InitializeLanes();
-        _timeToSpawnRemaining = GetRandomSpawnTime();        
-    }
+    public bool IsEnabled { get; private set; } = false;
 
     private void Update() {
-        SpawnEnemyWhenReady();
+        if (IsEnabled) {
+            SpawnEnemyWhenReady();
+        }
     }
 
     private void InitializeLanes() {
@@ -103,5 +102,13 @@ public class EnemySpawner : MonoBehaviour
         _lanesIndexActiveEnemiesDict[laneIndex]--;
 
         //Debug.Log("Enemy cleared form lane: " + laneIndex);
+    }
+
+    public void ResetES(bool turnOn) {
+        IsEnabled = turnOn;
+        if (turnOn) {
+            InitializeLanes();
+            _timeToSpawnRemaining = GetRandomSpawnTime();
+        }   
     }
 }

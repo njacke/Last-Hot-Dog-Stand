@@ -15,6 +15,10 @@ public class NE_MoveState : MoveState
     public override void Enter()
     {
         base.Enter();
+        if (GameManager.Instance.CurrentGameState == GameManager.GameState.BossTransition) {
+            _normalEnemy.SetMoveTargetPos(_normalEnemy.transform.position);
+            _normalEnemy.MyBoxCollider.enabled = false;
+        }
     }
 
     public override void Exit()
@@ -26,16 +30,17 @@ public class NE_MoveState : MoveState
     {
         base.LogicUpdate();
 
-        // transition to taste state
-        if (_normalEnemy.HasHotDog && !_normalEnemy.IsSatisfied) {
-            _normalEnemy.StateMachine.ChangeState(_normalEnemy.TasteState);
-        }
+        if (GameManager.Instance.CurrentGameState == GameManager.GameState.Level) {
+            // transition to taste state
+            if (_normalEnemy.HasHotDog && !_normalEnemy.IsSatisfied) {
+                _normalEnemy.StateMachine.ChangeState(_normalEnemy.TasteState);
+            }
 
-        //transition to convert state       
-        else if (_normalEnemy.IsInConvertRange()) {
-            _normalEnemy.StateMachine.ChangeState(_normalEnemy.ConvertState);
+            //transition to convert state       
+            else if (_normalEnemy.IsInConvertRange()) {
+                _normalEnemy.StateMachine.ChangeState(_normalEnemy.ConvertState);
+            }
         }
-
     }
 
     public override void PhysicsUpdate()

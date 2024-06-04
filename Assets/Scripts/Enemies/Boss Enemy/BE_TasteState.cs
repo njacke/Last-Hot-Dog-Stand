@@ -26,13 +26,12 @@ public class BE_TasteState : TasteState
     {
         base.LogicUpdate();
 
-        Debug.Log("I am in taste state.");
+        //Debug.Log("I am in taste state.");
 
         // transition to move state
-        if (!_bossEnemy.HasHotDog) {
+        if (!_bossEnemy.HasHotDog && _bossEnemy.IsWishDisplayed) {
             _bossEnemy.StateMachine.ChangeState(_bossEnemy.MoveState);
         }
-
     }
 
     public override void PhysicsUpdate()

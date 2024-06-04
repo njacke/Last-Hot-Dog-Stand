@@ -32,10 +32,10 @@ public class CheatSheetUI : MonoBehaviour
 
         // order for correct display in UI
         var customOrder = new List<NormalEnemy.NEType> {
-        NormalEnemy.NEType.Lawyer,
-        NormalEnemy.NEType.Businessman,
-        NormalEnemy.NEType.Critic,
-        NormalEnemy.NEType.Inspector
+            NormalEnemy.NEType.Lawyer,
+            NormalEnemy.NEType.Businessman,
+            NormalEnemy.NEType.Critic,
+            NormalEnemy.NEType.Inspector
         };  
 
 

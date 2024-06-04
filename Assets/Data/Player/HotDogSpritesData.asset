@@ -13,33 +13,33 @@ MonoBehaviour:
   m_Name: HotDogSpritesData
   m_EditorClassIdentifier: 
   BunSprites:
-  - {fileID: 974641912, guid: 0807acc541b09c24e969a9a8fc8ec898, type: 3}
-  - {fileID: -413375744, guid: 0807acc541b09c24e969a9a8fc8ec898, type: 3}
-  - {fileID: -784983164, guid: 0807acc541b09c24e969a9a8fc8ec898, type: 3}
-  - {fileID: -545906313, guid: 0807acc541b09c24e969a9a8fc8ec898, type: 3}
-  - {fileID: -751312643, guid: 0807acc541b09c24e969a9a8fc8ec898, type: 3}
-  - {fileID: 487338606, guid: 0807acc541b09c24e969a9a8fc8ec898, type: 3}
-  - {fileID: 108298203, guid: 0807acc541b09c24e969a9a8fc8ec898, type: 3}
-  - {fileID: -112358224, guid: 0807acc541b09c24e969a9a8fc8ec898, type: 3}
-  - {fileID: 1458204338, guid: 0807acc541b09c24e969a9a8fc8ec898, type: 3}
+  - {fileID: -325683255, guid: 25eac5be23010c349ac9d183a086acc3, type: 3}
+  - {fileID: -1504925033, guid: 25eac5be23010c349ac9d183a086acc3, type: 3}
+  - {fileID: -1719918549, guid: 25eac5be23010c349ac9d183a086acc3, type: 3}
+  - {fileID: -1067846037, guid: 25eac5be23010c349ac9d183a086acc3, type: 3}
+  - {fileID: -1454627605, guid: 25eac5be23010c349ac9d183a086acc3, type: 3}
+  - {fileID: 475204211, guid: 25eac5be23010c349ac9d183a086acc3, type: 3}
+  - {fileID: 651809743, guid: 25eac5be23010c349ac9d183a086acc3, type: 3}
+  - {fileID: 1142156723, guid: 25eac5be23010c349ac9d183a086acc3, type: 3}
+  - {fileID: -493292176, guid: 25eac5be23010c349ac9d183a086acc3, type: 3}
   DogSprites:
-  - {fileID: 1688896369, guid: 0807acc541b09c24e969a9a8fc8ec898, type: 3}
-  - {fileID: -1923735791, guid: 0807acc541b09c24e969a9a8fc8ec898, type: 3}
-  - {fileID: -1550517811, guid: 0807acc541b09c24e969a9a8fc8ec898, type: 3}
-  - {fileID: 1501807949, guid: 0807acc541b09c24e969a9a8fc8ec898, type: 3}
-  - {fileID: -29545595, guid: 0807acc541b09c24e969a9a8fc8ec898, type: 3}
-  - {fileID: 1761342732, guid: 0807acc541b09c24e969a9a8fc8ec898, type: 3}
-  - {fileID: -1603474840, guid: 0807acc541b09c24e969a9a8fc8ec898, type: 3}
-  - {fileID: 314375323, guid: 0807acc541b09c24e969a9a8fc8ec898, type: 3}
-  - {fileID: 1942586010, guid: 0807acc541b09c24e969a9a8fc8ec898, type: 3}
+  - {fileID: -116133879, guid: 25eac5be23010c349ac9d183a086acc3, type: 3}
+  - {fileID: 1771991163, guid: 25eac5be23010c349ac9d183a086acc3, type: 3}
+  - {fileID: -1851686019, guid: 25eac5be23010c349ac9d183a086acc3, type: 3}
+  - {fileID: -1625748786, guid: 25eac5be23010c349ac9d183a086acc3, type: 3}
+  - {fileID: 259601352, guid: 25eac5be23010c349ac9d183a086acc3, type: 3}
+  - {fileID: 426282985, guid: 25eac5be23010c349ac9d183a086acc3, type: 3}
+  - {fileID: -602921116, guid: 25eac5be23010c349ac9d183a086acc3, type: 3}
+  - {fileID: -609717082, guid: 25eac5be23010c349ac9d183a086acc3, type: 3}
+  - {fileID: -1420657564, guid: 25eac5be23010c349ac9d183a086acc3, type: 3}
   SauceSprites:
-  - {fileID: -1804076784, guid: 0807acc541b09c24e969a9a8fc8ec898, type: 3}
-  - {fileID: -1888261991, guid: 0807acc541b09c24e969a9a8fc8ec898, type: 3}
-  - {fileID: 869842563, guid: 0807acc541b09c24e969a9a8fc8ec898, type: 3}
-  - {fileID: 307941621, guid: 0807acc541b09c24e969a9a8fc8ec898, type: 3}
-  - {fileID: -765677069, guid: 0807acc541b09c24e969a9a8fc8ec898, type: 3}
-  - {fileID: -1817278636, guid: 0807acc541b09c24e969a9a8fc8ec898, type: 3}
-  - {fileID: -61268678, guid: 0807acc541b09c24e969a9a8fc8ec898, type: 3}
-  - {fileID: -289931171, guid: 0807acc541b09c24e969a9a8fc8ec898, type: 3}
-  - {fileID: -1621839977, guid: 0807acc541b09c24e969a9a8fc8ec898, type: 3}
+  - {fileID: -1864619262, guid: 25eac5be23010c349ac9d183a086acc3, type: 3}
+  - {fileID: -812834765, guid: 25eac5be23010c349ac9d183a086acc3, type: 3}
+  - {fileID: 225402069, guid: 25eac5be23010c349ac9d183a086acc3, type: 3}
+  - {fileID: 221739695, guid: 25eac5be23010c349ac9d183a086acc3, type: 3}
+  - {fileID: -879415339, guid: 25eac5be23010c349ac9d183a086acc3, type: 3}
+  - {fileID: -1498444359, guid: 25eac5be23010c349ac9d183a086acc3, type: 3}
+  - {fileID: 119666151, guid: 25eac5be23010c349ac9d183a086acc3, type: 3}
+  - {fileID: 1299295120, guid: 25eac5be23010c349ac9d183a086acc3, type: 3}
+  - {fileID: -1147268127, guid: 25eac5be23010c349ac9d183a086acc3, type: 3}
   EmptySprite: {fileID: 21300000, guid: 92951b17eb5d24842b3f5377695acd56, type: 3}
