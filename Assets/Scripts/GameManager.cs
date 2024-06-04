@@ -342,8 +342,9 @@ public class GameManager : Singleton<GameManager>
         _menuCanvas.SetActive(false);
         _cinematicCanvas.SetActive(false);
 
-
-        BossManager.InstantiateBossAtFightPos();
+        if (!isTransition) {
+            BossManager.InstantiateBossAtFightPos();
+        }
 
         if (!isTransition) {
             PlaySoundtrack(true, _defaultMusicVolume);
@@ -410,7 +411,7 @@ public class GameManager : Singleton<GameManager>
             Destroy(hotDog.gameObject);
         }
         
-        if (isTransition) {
+        if (!isTransition) {
             var bosses = FindObjectsOfType<BossEnemy>();
             foreach (var boss in bosses) {
                 Destroy(boss.gameObject);
