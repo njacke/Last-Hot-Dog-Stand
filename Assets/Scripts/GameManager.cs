@@ -263,7 +263,17 @@ public class GameManager : Singleton<GameManager>
         _cinematicCanvas.SetActive(false);
 
         _menuDisplayUI.DisplayMenu(MenuDisplayUI.MenuType.Instructions);
+    }
 
+    public void LoadCheatSheetMenu() {
+        PlayerControlsLocked = true;
+        MenuControlsLocked = false;
+
+        _menuCanvas.SetActive(true);
+        _uiCanvas.SetActive(true);
+        _cinematicCanvas.SetActive(false);
+
+        _menuDisplayUI.DisplayMenu(MenuDisplayUI.MenuType.CheatSheet);
     }
 
     public void LoadControlsIntro() {
@@ -275,7 +285,6 @@ public class GameManager : Singleton<GameManager>
         _cinematicCanvas.SetActive(false);
 
         _menuDisplayUI.DisplayMenu(MenuDisplayUI.MenuType.ControlsIntro);
-
     }
 
     public void LoadControlsGame() {
@@ -286,8 +295,7 @@ public class GameManager : Singleton<GameManager>
         _uiCanvas.SetActive(true);
         _cinematicCanvas.SetActive(false);
 
-        _menuDisplayUI.DisplayMenu(MenuDisplayUI.MenuType.ControlsGame);
-    }
+        _menuDisplayUI.DisplayMenu(MenuDisplayUI.MenuType.ControlsGame);    }
 
     public void LoadLevelOne() {
         CurrentGameState = GameState.Level;

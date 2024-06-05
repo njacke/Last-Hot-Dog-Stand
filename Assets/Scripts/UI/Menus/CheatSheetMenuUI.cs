@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WinScreenUI : MenuControlsUI
+public class CheatSheetMenuUI : MenuControlsUI
 {
     public override void LoadSelection()
     {
-        Debug.Log("Load Selection called in Win screen");   
+        Debug.Log("Load Selection called in Instructions menu");   
         StartCoroutine(LoadSelectionRoutine());    
     }
 
@@ -22,6 +22,13 @@ public class WinScreenUI : MenuControlsUI
 
     private IEnumerator LoadSelectionRoutine() {
         yield return new WaitForSeconds(_confirmDelay);
-        GameManager.Instance.ReloadGame();
+
+        if (GameManager.Instance.CurrentGameState == GameManager.GameState.Intro) {
+            GameManager.Instance.LoadControlsIntro();
+        }
+        else {
+            GameManager.Instance.LoadControlsGame();
+        }
     }
+    
 }

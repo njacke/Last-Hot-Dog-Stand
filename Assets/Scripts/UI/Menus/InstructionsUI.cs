@@ -22,13 +22,7 @@ public class InstructionsUI : MenuControlsUI
 
     private IEnumerator LoadSelectionRoutine() {
         yield return new WaitForSeconds(_confirmDelay);
-        if (_currentSelection == 0) {
-            if (GameManager.Instance.CurrentGameState == GameManager.GameState.Intro) {
-                GameManager.Instance.LoadControlsIntro();
-            }
-            else {
-                GameManager.Instance.LoadControlsGame();
-            }
-        }
-    }
+
+        GameManager.Instance.LoadCheatSheetMenu();
+    }    
 }

@@ -46,6 +46,7 @@ public class BossManager : MonoBehaviour
         foreach (var enemy in enemies) {
             enemy.SetMoveTargetPos(enemy.transform.position);
             enemy.StateMachine.ChangeState(enemy.MoveState);
+            enemy.HideSprite();
         }
     }
 

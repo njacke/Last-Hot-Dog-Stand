@@ -12,11 +12,7 @@ public class ControlsIntroUI : MenuControlsUI
 
     private IEnumerator LoadSelectionRoutine() {
         yield return new WaitForSeconds(_confirmDelay);
-        if (_currentSelection == 0) {
-            GameManager.Instance.LoadInstructions();            
-        }
-        else if (_currentSelection == 1) {
-            GameManager.Instance.LoadLevelOne();
-        }
+
+        GameManager.Instance.LoadLevelOne();
     }
 }

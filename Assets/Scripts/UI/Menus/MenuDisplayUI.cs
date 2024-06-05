@@ -11,6 +11,7 @@ public class MenuDisplayUI : MonoBehaviour
     [SerializeField] private GameObject _controlsGameMenu;
     [SerializeField] private GameObject _gameOverMenu;
     [SerializeField] private GameObject _winScreenMenu;
+    [SerializeField] private GameObject _cheatSheetMenu;
 
     private Dictionary<MenuType, GameObject> _menusDict;
 
@@ -21,6 +22,7 @@ public class MenuDisplayUI : MonoBehaviour
         ControlsGame,
         GameOver,
         WinScreen,
+        CheatSheet
     }
 
     private void Awake() {
@@ -35,6 +37,7 @@ public class MenuDisplayUI : MonoBehaviour
             { MenuType.ControlsGame, _controlsGameMenu },
             { MenuType.GameOver, _gameOverMenu },
             { MenuType.WinScreen, _winScreenMenu },
+            { MenuType.CheatSheet, _cheatSheetMenu },
         };
     } 
 
